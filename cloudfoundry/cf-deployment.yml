@@ -1,0 +1,104 @@
+meta:
+  # override this in your stub to set the environment name,
+  # which is used for the deployment name
+  #
+  # i.e. cf-tabasco
+  environment: ~
+
+  stemcell: (( merge ))
+
+name: (( meta.environment ))
+
+director_uuid: (( merge ))
+
+releases: (( merge ))
+
+networks: (( merge ))
+
+jobs: (( merge ))
+
+properties: (( merge ))
+
+compilation:
+  workers: 6
+  network: cf1
+  reuse_compilation_vms: true
+  cloud_properties:
+      instance_type: m1.medium
+
+update:
+  canaries: 1
+  max_in_flight: 1
+  canary_watch_time: 30000-600000
+  update_watch_time: 5000-600000
+
+resource_pools:
+  - name: small_z1
+    network: cf1
+    size: (( auto ))
+    stemcell: (( meta.stemcell ))
+    cloud_properties:
+      instance_type: m1.small
+
+  - name: small_z2
+    network: cf2
+    size: (( auto ))
+    stemcell: (( meta.stemcell ))
+    cloud_properties:
+      instance_type: m1.small
+
+  - name: medium_z1
+    network: cf1
+    size: (( auto ))
+    stemcell: (( meta.stemcell ))
+    cloud_properties:
+      instance_type: m1.medium
+
+  - name: medium_z2
+    network: cf2
+    size: (( auto ))
+    stemcell: (( meta.stemcell ))
+    cloud_properties:
+      instance_type: m1.medium
+
+  - name: large_z1
+    network: cf1
+    size: (( auto ))
+    stemcell: (( meta.stemcell ))
+    cloud_properties:
+      instance_type: m1.large
+
+  - name: large_z2
+    network: cf2
+    size: (( auto ))
+    stemcell: (( meta.stemcell ))
+    cloud_properties:
+      instance_type: m1.large
+
+  - name: runner_z1
+    network: cf1
+    size: (( auto ))
+    stemcell: (( meta.stemcell ))
+    cloud_properties:
+      instance_type: m1.large
+
+  - name: runner_z2
+    network: cf2
+    size: (( auto ))
+    stemcell: (( meta.stemcell ))
+    cloud_properties:
+      instance_type: m1.large
+
+  - name: router_z1
+    network: cf1
+    size: (( auto ))
+    stemcell: (( meta.stemcell ))
+    cloud_properties:
+      instance_type: m1.medium
+
+  - name: router_z2
+    network: cf2
+    size: (( auto ))
+    stemcell: (( meta.stemcell ))
+    cloud_properties:
+      instance_type: m1.medium

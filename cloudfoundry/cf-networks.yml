@@ -1,0 +1,35 @@
+networks:
+  - name: floating
+    type: vip
+    cloud_properties: 
+      net_id: 54213169-a10a-4c7c-a091-405819f325d5
+      security_groups:
+      - cf-public
+  - name: cf1
+    type: manual
+    subnets:
+      - name: private
+        range: 172.24.100.0/24
+        gateway: 172.24.100.1
+        reserved: ~
+        static:
+         - 172.24.100.100 - 172.24.100.200
+        cloud_properties:
+          net_id: 3ea9b8be-2cc0-4e2d-8c44-1890c58826bc
+          security_groups:
+          - cf-public
+          - cf-private
+  - name: cf2
+    type: manual
+    subnets:
+      - name: private
+        range: 172.24.101.0/24
+        gateway: 172.24.101.1
+        reserved: ~
+        static: 
+         - 172.24.101.100 - 172.24.101.200
+        cloud_properties:
+          net_id: 3ea9b8be-2cc0-4e2d-8c44-1890c58826bc
+          security_groups:
+          - cf-public
+          - cf-private
