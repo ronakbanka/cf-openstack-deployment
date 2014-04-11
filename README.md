@@ -33,10 +33,10 @@ bosh deploy
 Currently struggeling with:
 API deploymment does not work. Log says that there is 'bad content', currently not sure what is causing the issue. Nfs did not launch last deployment, because the volume was not created. 
 Last run resultet in running version of the deployment, though the resulting URLs:
-http://api.mydomain.xipio -> NOT FOUND (possibly due to misconfiguration with https)
-http://login.mydomain.xipio -> NOT FOUND (possibly due to misconfiguration with https)
-http://console.mydomain.xipio -> NOT FOUND (possibly due to misconfiguration with https)
-http://uaa.mydomain.xipio -> FOUND, but JDBC Database error.
+- http://api.mydomain.xipio -> NOT FOUND (possibly due to misconfiguration with https)
+- http://login.mydomain.xipio -> NOT FOUND (possibly due to misconfiguration with https)
+- http://console.mydomain.xipio -> NOT FOUND (possibly due to misconfiguration with https)
+- http://uaa.mydomain.xipio -> FOUND, but JDBC Database error.
 
 Please contribute!
 
