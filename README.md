@@ -1,8 +1,9 @@
-cf-openstack-deployment
+Openstack Deploymnet
 =======================
-
 The way to a working Openstack deployment with CloudFoundry
 
+Preinstallation
+====
 Preinstallation setup routine:
 ````bash
 sudo apt-get install mercurial
@@ -40,7 +41,8 @@ Last run resultet in running version of the deployment, though the resulting URL
 
 Please contribute!
 
-=== Debugging ===
+Debugging with SSH
+===
 Connection to a bosh instance for debugging via SSH. This can be done like this:
 
 ````bash
