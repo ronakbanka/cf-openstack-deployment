@@ -1,0 +1,74 @@
+localhost:cs-certs johanneshiemer$ openssl req -new -x509 -keyout cert.pem -out cert.pem -days 365 -nodes
+Generating a 1024 bit RSA private key
+..........++++++
+..++++++
+writing new private key to 'cert.pem'
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:DE
+State or Province Name (full name) [Some-State]:Germany
+Locality Name (eg, city) []:Darmstadt
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Velum Org.
+Organizational Unit Name (eg, section) []:CloudFoundry
+Common Name (e.g. server FQDN or YOUR name) []:*.yourDomain.xip.io                                                  
+Email Address []:user@email.com
+
+The created certificate needs to be applied to:
+
+login:
+  uaa_certificate:
+
+jobs:
+  - name: ha_proxy_z1
+    release: (( meta.release.name ))
+    ...
+    properties:
+      ...
+      ha_proxy:
+        ssl_pem: 
+
+-----BEGIN RSA PRIVATE KEY-----
+MIICXQIBAAKBgQDRC8OyFhSYnfxmeu3wYn+pTS3CIYSVSAWO+VEuLY7oX8rSYxP6
+v7wA6Ld/XidRkvxIfKb/jnQbtATcTZH7Th3VQXpYxVEV0sHPHeoYr2VnrX3BRwlN
+Sjl1rrUfuFGlwuD6djVXwSy/VIKLQnEGc+YBO+K/4GqQfcV2tpredRJDqQIDAQAB
+AoGBAJt3yF7VlRO7y07b9cFlP9RFldZe3x+2pIukV/+j2jhvpYO6M820crmqWW3c
+NBmy2vV93yUIaMmBpGvDNOJVQlFSQAftKQup6TW7A0aL0y0EvVxRWUVa9M39Q5nG
+chbDUtn42Q55aBBMD2i6XeJGATY8KvwkbKnvOQrhZfJaGONBAkEA+9Bcncdbu2ox
+TUn5+gNgc66eECH0WO/PNnZtu8JHaIvS0WlHtNVpKqHrZBKQVfsCeP7tkZKqC51F
+PxItn+zthQJBANSFZWfM/qvlONJHqXsH2e4Ov6LyZ7tjG9asiaM/547eZxgEmkcB
+1xkM6IKLRWrmNCj356gbtM0cu2buoT5NVNUCQQCocX2ysUukd2mZWNXVrvKTD4h+
+JChuYaQLu3a19USNI5MXL8Seq28Y7I0oON7CFRFXXLgP+7qx4DcU9JT+eJ99AkB0
+dsISt3GdLBoOir0jMjNI1YZJuwQD2hVoeNdYwm2YiuL+c49EeIqzLLLCz6X0JkHR
+bcHjC4Pyn9tHVmDA7sodAkAuh+A4miDDlmEA8gsBH8TdW4xBnUiOAaefW4kEz2Vd
+PHNrSDC+J5NMiFLA/uEsQblyYXW5t8rR2bst7ojFb6Sc
+-----END RSA PRIVATE KEY-----
+-----BEGIN CERTIFICATE-----
+MIID3TCCA0agAwIBAgIJAJ+a0kUJmtWRMA0GCSqGSIb3DQEBBQUAMIGmMQswCQYD
+VQQGEwJERTEQMA4GA1UECBMHR2VybWFueTESMBAGA1UEBxMJRGFybXN0YWR0MRMw
+EQYDVQQKEwpWZWx1bSBPcmcuMRUwEwYDVQQLEwxDbG91ZEZvdW5kcnkxHzAdBgNV
+BAMUFiouMTMwLjgzLjExLjE2OS54aXAuaW8xJDAiBgkqhkiG9w0BCQEWFWpoaWVt
+ZXJAY2xvdWRzY2FsZS5kZTAeFw0xNDA0MjcwODU5MTVaFw0xNTA0MjcwODU5MTVa
+MIGmMQswCQYDVQQGEwJERTEQMA4GA1UECBMHR2VybWFueTESMBAGA1UEBxMJRGFy
+bXN0YWR0MRMwEQYDVQQKEwpWZWx1bSBPcmcuMRUwEwYDVQQLEwxDbG91ZEZvdW5k
+cnkxHzAdBgNVBAMUFiouMTMwLjgzLjExLjE2OS54aXAuaW8xJDAiBgkqhkiG9w0B
+CQEWFWpoaWVtZXJAY2xvdWRzY2FsZS5kZTCBnzANBgkqhkiG9w0BAQEFAAOBjQAw
+gYkCgYEA0QvDshYUmJ38Znrt8GJ/qU0twiGElUgFjvlRLi2O6F/K0mMT+r+8AOi3
+f14nUZL8SHym/450G7QE3E2R+04d1UF6WMVRFdLBzx3qGK9lZ619wUcJTUo5da61
+H7hRpcLg+nY1V8Esv1SCi0JxBnPmATviv+BqkH3Fdraa3nUSQ6kCAwEAAaOCAQ8w
+ggELMB0GA1UdDgQWBBRiG2TA4LBvbPpyUQ/bEDsL4MhxIjCB2wYDVR0jBIHTMIHQ
+gBRiG2TA4LBvbPpyUQ/bEDsL4MhxIqGBrKSBqTCBpjELMAkGA1UEBhMCREUxEDAO
+BgNVBAgTB0dlcm1hbnkxEjAQBgNVBAcTCURhcm1zdGFkdDETMBEGA1UEChMKVmVs
+dW0gT3JnLjEVMBMGA1UECxMMQ2xvdWRGb3VuZHJ5MR8wHQYDVQQDFBYqLjEzMC44
+My4xMS4xNjkueGlwLmlvMSQwIgYJKoZIhvcNAQkBFhVqaGllbWVyQGNsb3Vkc2Nh
+bGUuZGWCCQCfmtJFCZrVkTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4GB
+AGSULjC7HgBgVIYd5keZ+xp3nT09hV9Y8D/hJVcyP/l82XFJpwW0Eqhijfqr5JIF
+I0MI4YxEjTl9jdRWq2D+7L6HDrhfVpKKQIwtKkVo6KyURUkwy/f0kRyjozucE3y9
+ukpst7VqkgMItJqxgfQQFCqxCmA7l9pkLoxeO3nLHMn3
+-----END CERTIFICATE-----
+

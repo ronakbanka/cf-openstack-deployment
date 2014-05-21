@@ -11,7 +11,8 @@ networks:
       - name: private
         range: 172.24.100.0/24
         gateway: 172.24.100.1
-        reserved: ~
+        reserved: 
+         - 172.24.100.2 - 172.24.100.40
         static:
          - 172.24.100.100 - 172.24.100.200
         cloud_properties:

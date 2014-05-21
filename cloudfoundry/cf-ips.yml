@@ -1,0 +1,34 @@
+ha_proxy_z1: cf1/static_ips(0)
+
+nats_z1: cf1/static_ips(10)
+#nats_z2: cf2/static_ips(0)
+
+#logs_z1: cf1/static_ips(26)
+#logs_z2: cf2/static_ips(26)
+
+postgres_z1: cf1/static_ips(2)
+
+uaa_z1: cf1/static_ips(3)
+#uaa_z2: cf2/static_ips(3)
+
+login_z1: cf1/static_ips(4)
+
+api_z1: cf1/static_ips(5)
+clock_global: cf1/static_ips(6)
+#etcd_leader_z1: cf1/static_ips(10)
+
+runner_z1: cf1/static_ips(7)
+nfs_z1: cf1/static_ips(8)
+loggregator_z1: cf1/static_ips(20, 21)
+#loggregator_z2: cf2/static_ips(20, 21)
+
+loggregator_trafficcontroller_z1: static_ips(25)
+#loggregator_trafficcontroller_z2: static_ips(25)
+
+router_z1: static_ips(1)
+#router_z2: static_ips(1)
+
+services:
+  mongo: static_ips(40)
+  rabbit: static_ips(41)
+  postgres: static_ips(42)

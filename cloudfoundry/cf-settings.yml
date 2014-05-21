@@ -1,9 +1,11 @@
 ---
-director_uuid: 55528c93-260b-4a82-b355-07239db395c3
+director_uuid: 7689b079-ae56-42f8-9716-bc9389fd04bb
 name: cf-cs
 releases:
- - name: cf
-   version: 165
+  - name: cf
+    version: latest
+  - name: cf-services-contrib
+    version: latest
 
 meta:
   stemcell:
@@ -11,17 +13,21 @@ meta:
     version: latest
 
 properties:
-  domain: mydomain.xip.io
+  domain: yourDomain.xip.io
+  secret: yourSecret
+
+  use_protocol: https
+  use_nossl: false
 
   nats:
     user: nats
     password: nats
-    address: 0.nats.default.mydomain.bosh
+
+  uaa_client_auth_credentials:
+    username: services
+    password: (( properties.secret ))
 
   databases: &databases
-    db_scheme: postgres
-    address: 0.postgres.default.mydomain.bosh
-    port: 5524
     roles:
       - tag: admin
         name: ccadmin
@@ -29,63 +35,50 @@ properties:
       - tag: admin
         name: uaaadmin
         password: uaaadmin
-    databases:
-      - tag: cc
-        name: ccdb
-        citext: true
-      - tag: uaa
-        name: uaadb
-        citext: true
 
   ccdb: &ccdb
-    db_scheme: postgres
-    address: 0.postgres.default.mydomain.bosh
-    port: 5524
     roles:
       - tag: admin
         name: ccadmin
         password: ccadmin
-    databases:
-      - tag: cc
-        name: ccdb
-        citext: true
 
-  ccdb_ng: *ccdb
+  ccdb_ng: 
+    roles:
+      - tag: admin
+        name: ccadmin
+        password: ccadmin
+
+  loggregator:
+    nats:
+      password: (( properties.nats.password ))
 
   uaadb:
-    db_scheme: postgresql
-    address: 0.postgres.default.mydomain.bosh
-    port: 5524
     roles:
       - tag: admin
         name: uaaadmin
         password: uaaadmin
-    databases:
-      - tag: uaa
-        name: uaadb
-        citext: true
 
   router: 
     status:
       user: router
-      password: router
+      password: (( properties.secret ))
 
   dea_next:
     disk_mb: 10000
-    memory_mb: 1024
+    memory_mb: 7096
 
   loggregator_endpoint: # The end point sources will connect to
-    shared_secret: mydomain
+    shared_secret: (( properties.secret ))
 
   cc: &cc
     logging_level: debug
     cc_partition: default
-    db_encryption_key: mydomain
-    bootstrap_admin_email: "jhiemer@mydomain.de"
-    bulk_api_password: mydomain
+    db_encryption_key: (( properties.secret ))
+    bootstrap_admin_email: "jhiemer@yourSecret.de"
+    bulk_api_password: (( secret ))
     uaa_resource_id: cloud_controller
     staging_upload_user: upload
-    staging_upload_password: mydomain
+    staging_upload_password: (( properties.secret ))
     resource_pool:
       resource_directory_key: cf-att-io-cc-resources
     droplets:
@@ -97,63 +90,82 @@ properties:
 
   login:
     catalina_opts: -Xmx768m -XX:MaxPermSize=256m
+    uaa_certificate: |
+      -----BEGIN CERTIFICATE-----
+      MIID3TCCA0agAwIBAgIJAJ+a0kUJmtWRMA0GCSqGSIb3DQEBBQUAMIGmMQswCQYD
+      VQQGEwJERTEQMA4GA1UECBMHR2VybWFueTESMBAGA1UEBxMJRGFybXN0YWR0MRMw
+      EQYDVQQKEwpWZWx1bSBPcmcuMRUwEwYDVQQLEwxDbG91ZEZvdW5kcnkxHzAdBgNV
+      BAMUFiouMTMwLjgzLjExLjE2OS54aXAuaW8xJDAiBgkqhkiG9w0BCQEWFWpoaWVt
+      ZXJAY2xvdWRzY2FsZS5kZTAeFw0xNDA0MjcwODU5MTVaFw0xNTA0MjcwODU5MTVa
+      MIGmMQswCQYDVQQGEwJERTEQMA4GA1UECBMHR2VybWFueTESMBAGA1UEBxMJRGFy
+      bXN0YWR0MRMwEQYDVQQKEwpWZWx1bSBPcmcuMRUwEwYDVQQLEwxDbG91ZEZvdW5k
+      cnkxHzAdBgNVBAMUFiouMTMwLjgzLjExLjE2OS54aXAuaW8xJDAiBgkqhkiG9w0B
+      CQEWFWpoaWVtZXJAY2xvdWRzY2FsZS5kZTCBnzANBgkqhkiG9w0BAQEFAAOBjQAw
+      gYkCgYEA0QvDshYUmJ38Znrt8GJ/qU0twiGElUgFjvlRLi2O6F/K0mMT+r+8AOi3
+      f14nUZL8SHym/450G7QE3E2R+04d1UF6WMVRFdLBzx3qGK9lZ619wUcJTUo5da61
+      H7hRpcLg+nY1V8Esv1SCi0JxBnPmATviv+BqkH3Fdraa3nUSQ6kCAwEAAaOCAQ8w
+      ggELMB0GA1UdDgQWBBRiG2TA4LBvbPpyUQ/bEDsL4MhxIjCB2wYDVR0jBIHTMIHQ
+      gBRiG2TA4LBvbPpyUQ/bEDsL4MhxIqGBrKSBqTCBpjELMAkGA1UEBhMCREUxEDAO
+      BgNVBAgTB0dlcm1hbnkxEjAQBgNVBAcTCURhcm1zdGFkdDETMBEGA1UEChMKVmVs
+      dW0gT3JnLjEVMBMGA1UECxMMQ2xvdWRGb3VuZHJ5MR8wHQYDVQQDFBYqLjEzMC44
+      My4xMS4xNjkueGlwLmlvMSQwIgYJKoZIhvcNAQkBFhVqaGllbWVyQGNsb3Vkc2Nh
+      bGUuZGWCCQCfmtJFCZrVkTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4GB
+      AGSULjC7HgBgVIYd5keZ+xp3nT09hV9Y8D/hJVcyP/l82XFJpwW0Eqhijfqr5JIF
+      I0MI4YxEjTl9jdRWq2D+7L6HDrhfVpKKQIwtKkVo6KyURUkwy/f0kRyjozucE3y9
+      ukpst7VqkgMItJqxgfQQFCqxCmA7l9pkLoxeO3nLHMn3
+      -----END CERTIFICATE-----
 
   uaa:
-    url: http://uaa.mydomain.xip.io
-    no_ssl: true
     catalina_opts: -Xmx768m -XX:MaxPermSize=256m
     resource_id: account_manager
     jwt:
       signing_key: |
         -----BEGIN RSA PRIVATE KEY-----
-        MIICXAIBAAKBgQDHFr+KICms+tuT1OXJwhCUmR2dKVy7psa8xzElSyzqx7oJyfJ1
-        JZyOzToj9T5SfTIq396agbHJWVfYphNahvZ/7uMXqHxf+ZH9BL1gk9Y6kCnbM5R6
-        0gfwjyW1/dQPjOzn9N394zd2FJoFHwdq9Qs0wBugspULZVNRxq7veq/fzwIDAQAB
-        AoGBAJ8dRTQFhIllbHx4GLbpTQsWXJ6w4hZvskJKCLM/o8R4n+0W45pQ1xEiYKdA
-        Z/DRcnjltylRImBD8XuLL8iYOQSZXNMb1h3g5/UGbUXLmCgQLOUUlnYt34QOQm+0
-        KvUqfMSFBbKMsYBAoQmNdTHBaz3dZa8ON9hh/f5TT8u0OWNRAkEA5opzsIXv+52J
-        duc1VGyX3SwlxiE2dStW8wZqGiuLH142n6MKnkLU4ctNLiclw6BZePXFZYIK+AkE
-        xQ+k16je5QJBAN0TIKMPWIbbHVr5rkdUqOyezlFFWYOwnMmw/BKa1d3zp54VP/P8
-        +5aQ2d4sMoKEOfdWH7UqMe3FszfYFvSu5KMCQFMYeFaaEEP7Jn8rGzfQ5HQd44ek
-        lQJqmq6CE2BXbY/i34FuvPcKU70HEEygY6Y9d8J3o6zQ0K9SYNu+pcXt4lkCQA3h
-        jJQQe5uEGJTExqed7jllQ0khFJzLMx0K6tj0NeeIzAaGCQz13oo2sCdeGRHO4aDh
-        HH6Qlq/6UOV5wP8+GAcCQFgRCcB+hrje8hfEEefHcFpyKH+5g1Eu1k0mLrxK2zd+
-        4SlotYRHgPCEubokb2S1zfZDWIXW3HmggnGgM949TlY=
+        MIICXAIBAAKBgQDduW/tIISShh5+Hlx36P5VGUX4ANQNkTHZwF+40RmRUvOk+GMC
+        ncCNQz8l17EqmNJpjUkE9+7N/4zFwUZ+L/W+d+9ApWGtraHQxaNGufndysj8IBEF
+        2FGp1KSe+ur3Ctw/0a8gq3mrhiZD1dsMkGWFrd8RCqFcu9/3Olp6ittLfwIDAQAB
+        AoGAZA0akZE74XZ96gE/Tqino7Ts2tVc2uZq7UyepSJN/ELHSOkAnJyc1+HBbA0h
+        mAwv3otvqLtMWk53soDdk3GG3N3rYGlgPqhd1sjKRX8fANN40Q6B/gPP1dM3Mc1C
+        n0xsKfFYYDNJY7t4Y2oW8l7iRb6CMtKpKZbgPSBXNvCR7AkCQQDyad5g9q47hFxA
+        3iQ5UG3yeUtUhN/NTD45tjb2glCjhF8t5H8v8YlerTg/1b+B5pd0i+qnVIojeEFC
+        ZqIwTr31AkEA6ia4v49u1Tgz24IWXNqkIpH6VGPC5IbdYuojdBVMym5E0U4Muz0k
+        QBLdSWPM7rzwy/wHEdnNC9DPVfxRRSsnIwJAGLg5CBQ/oiwWKDs+4GVWQOKjjuPZ
+        2pqKweHV6v9Q78vA1PI3EhGEW5Y4ZTILzFhSW30lGZkiWQmbRgUnRtvQvQJAEmDn
+        r2F6uZGnwFr9llwy9eOvWmBaM8XCKrll/v6NAHaXQDZ4GVo7NixE4jXLKBH8dIZb
+        p7MIvRyuqXkch+lTMQJBAI+B/9UhsSbgWNwVYmLTYimoJT6aHkG+7rRuIv1OR0fi
+        Kbj/O3je0t7U4UraJdg2sLoTNGdn7ekw2mvRubDQOXE=
         -----END RSA PRIVATE KEY-----
       verification_key: |
         -----BEGIN PUBLIC KEY-----
-        MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDHFr+KICms+tuT1OXJwhCUmR2d
-        KVy7psa8xzElSyzqx7oJyfJ1JZyOzToj9T5SfTIq396agbHJWVfYphNahvZ/7uMX
-        qHxf+ZH9BL1gk9Y6kCnbM5R60gfwjyW1/dQPjOzn9N394zd2FJoFHwdq9Qs0wBug
-        spULZVNRxq7veq/fzwIDAQAB
+        MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDduW/tIISShh5+Hlx36P5VGUX4
+        ANQNkTHZwF+40RmRUvOk+GMCncCNQz8l17EqmNJpjUkE9+7N/4zFwUZ+L/W+d+9A
+        pWGtraHQxaNGufndysj8IBEF2FGp1KSe+ur3Ctw/0a8gq3mrhiZD1dsMkGWFrd8R
+        CqFcu9/3Olp6ittLfwIDAQAB
         -----END PUBLIC KEY-----
     cc:
-      client_secret: mydomain
+      client_secret: (( properties.secret ))
     admin:
-      client_secret: mydomain
+      client_secret: (( properties.secret ))
     batch:
       username: batch
-      password: mydomain
+      password: (( properties.secret ))
     clients:
       login:
-        secret: mydomain
-        redirect-uri: #
+        secret: (( properties.secret ))
       developer_console:
-        secret: mydomain
-        redirect-uri: #
+        secret: (( properties.secret ))
       app-direct:
-        secret: mydomain
-        redirect-uri: #
+        secret: (( properties.secret ))
       support-services:
-        secret: mydomain
-        redirect-uri: #
+        secret: (( properties.secret ))
       servicesmgmt:
-        secret: mydomain
-        redirect-uri: #
+        secret: (( properties.secret ))
       space-mail:
-        secret: mydomain
-        redirect-uri: #
-    scim:      
+        secret: (( properties.secret ))
+    scim:
+      user:
+         override: true
+      userids_enabled: true      
       users:
-      - admin|mydomain|scim.write,scim.read,openid,cloud_controller.admin,uaa.admin,password.write
-      - services|mydomain|scim.write,scim.read,openid,cloud_controller.admin
+      - (( "admin|" properties.secret "|scim.write,scim.read,openid,cloud_controller.admin,uaa.admin,password.write"))
+      - (( "services|" properties.secret "|scim.write,scim.read,openid,cloud_controller.admin")) 

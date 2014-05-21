@@ -20,7 +20,7 @@ jobs: (( merge ))
 properties: (( merge ))
 
 compilation:
-  workers: 6
+  workers: 1
   network: cf1
   reuse_compilation_vms: true
   cloud_properties:
