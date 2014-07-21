@@ -12,8 +12,8 @@ sudo apt-get install bzr
 bash < <(curl -s https://raw.github.com/moovweb/gvm/master/binscripts/gvm-installer)
 source /home/ubuntu/.gvm/scripts/gvm
 
-gvm install go1.1.1
-gvm use go1.1.1
+gvm install go1.2
+gvm use go1.1.2
 mkdir ~/go
 export GOPATH=~/go
 export PATH=$PATH:$GOPATH/bin
