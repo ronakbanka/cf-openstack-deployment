@@ -9,7 +9,7 @@ Preinstallation setup routine:
 sudo apt-get install mercurial
 sudo apt-get install bzr
 
-bash < <(curl -s https://raw.github.com/moovweb/gvm/master/binscripts/gvm-installer)
+bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 source /home/ubuntu/.gvm/scripts/gvm
 
 gvm install go1.2
